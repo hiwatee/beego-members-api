@@ -1,0 +1,33 @@
+version: '3'
+services:
+  go:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/go/src:cached
+      # exclude volumes
+      #- /go/src/api/vendor
+      #- /go/src/api/swagger
+    tty: true
+  # swagger-ui:
+  #   image: swaggerapi/swagger-ui
+  #   ports:
+  #     - "8002:8080"
+  #   volumes:
+  #     - ./gen/http/openapi.yaml:/openapi.yaml
+  #   environment:
+  #     SWAGGER_JSON: /openapi.yaml
+  mysql:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./localhost.sql:/docker-entrypoint-initdb.d/install_db.sql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "development"
+      MYSQL_USER: "root"
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
