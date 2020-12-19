@@ -11,9 +11,11 @@ import (
 	"beego-members-api/controllers"
 
 	"github.com/astaxie/beego"
+	"github.com/beego/admin"
 )
 
 func init() {
+	admin.Run()
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/object",
 			beego.NSInclude(
