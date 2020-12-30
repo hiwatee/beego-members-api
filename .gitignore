@@ -3,3 +3,4 @@
 app
 beego-members-api
 mem-230.memprof
+*.tmp

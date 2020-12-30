@@ -10,7 +10,7 @@ package routers
 import (
 	"beego-members-api/controllers"
 
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {

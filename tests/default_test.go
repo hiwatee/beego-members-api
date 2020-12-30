@@ -8,7 +8,8 @@ import (
 	"path/filepath"
 	_ "beego-members-api/routers"
 
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/core/logs"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -24,7 +25,7 @@ func TestGet(t *testing.T) {
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
 
-	beego.Trace("testing", "TestGet", "Code[%d]\n%s", w.Code, w.Body.String())
+	logs.Info("testing", "TestGet", "Code[%d]\n%s", w.Code, w.Body.String())
 
 	Convey("Subject: Test Station Endpoint\n", t, func() {
 	        Convey("Status Code Should Be 200", func() {
