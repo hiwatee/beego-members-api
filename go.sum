@@ -47,6 +47,7 @@ github.com/beego/bee v1.12.3 h1:9gCJRAhSWtUasJsX4p3BXH9QQf7MS09PdYP3xE6iD5Q=
 github.com/beego/bee v1.12.3/go.mod h1:WNn8+mpl0sbRgP3JKh6wJG3pSCpEQ8hoDMZFBb0n/Ps=
 github.com/beego/bee/v2 v2.0.2 h1:xWARyIqdnnbNMDBDUdb6Gvr9S/yGXC6Ni43kKdS1/eg=
 github.com/beego/bee/v2 v2.0.2/go.mod h1:rfZa899qLAF8SYBRvE7mWNPZTU7/qysOBhaCLmZrMX4=
+github.com/beego/beego v1.12.3 h1:yHJ9h4lzC/Vp3z9DzYoL+8SvJo82nGPe5+LMmPa3IPw=
 github.com/beego/beego/v2 v2.0.1 h1:07a7Z0Ok5vbqyqh+q53sDPl9LdhKh0ZDy3gbyGrhFnE=
 github.com/beego/beego/v2 v2.0.1/go.mod h1:8zyHi1FnWO1mZLwTn62aKRIZF/aIKvkCBB2JYs+eqQI=
 github.com/beego/goyaml2 v0.0.0-20130207012346-5545475820dd/go.mod h1:1b+Y/CofkYwXMUU0OhQqGvsY2Bvgr4j6jfT699wyZKQ=
