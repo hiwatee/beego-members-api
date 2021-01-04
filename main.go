@@ -3,30 +3,20 @@ package main
 import (
 	"beego-members-api/models"
 	_ "beego-members-api/routers"
-	"fmt"
 
-	"github.com/astaxie/beego/orm"
-	"github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
-	sqlConn, err := beego.AppConfig.String("sqlConn")
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	orm.RegisterDataBase("default", "mysql", sqlConn)
-	if err != nil {
-		fmt.Println(err)
-	}
+	orm.RegisterDataBase("default", "mysql", "root:password@tcp(db:3306)/development?charset=utf8")
 	orm.RegisterModel(
 		new(models.User),
 		new(models.Profile),
 	)
-	err = orm.RunSyncdb("default", false, true)
-	if err != nil {
-		fmt.Println(err)
-	}
-
+	orm.RunSyncdb("default", false, true)
 }
 
 func main() {
@@ -34,5 +24,5 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
-	web.Run()
+	beego.Run()
 }

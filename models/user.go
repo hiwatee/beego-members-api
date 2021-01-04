@@ -21,10 +21,6 @@ type Profile struct {
 	Age int16
 }
 
-func init() {
-	orm.RegisterModel(new(User))
-}
-
 // AddUser insert a new User into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
