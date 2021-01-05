@@ -19,7 +19,7 @@ type User struct {
 }
 
 type Profile struct {
-	Id  int
+	Id  int64 `orm:"auto"`
 	Age int16 `orm:"size(128)"`
 }
 
@@ -29,6 +29,10 @@ func AddUser(m *User) (id int64, err error) {
 	hash := hashAndSalt(m.Password)
 	m.Password = hash
 	o := orm.NewOrm()
+
+	profileId, err := o.Insert(m.Profile)
+
+	m.Profile.Id = profileId
 	id, err = o.Insert(m)
 	return
 }
