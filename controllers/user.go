@@ -15,6 +15,15 @@ type UserController struct {
 	beego.Controller
 }
 
+type ProfileRequest struct {
+	Age int64 `json:"age" required:"true" example:"0"`
+}
+type UserCreateRequest struct {
+	Email    string         `json:"email" required:"true" example:"info@example.com"`
+	Password string         `json:"password" required:"true" example:"password"`
+	Profile  ProfileRequest `json:"profile" required:"true"`
+}
+
 // URLMapping ...
 func (c *UserController) URLMapping() {
 	c.Mapping("Post", c.Post)
@@ -27,7 +36,7 @@ func (c *UserController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create User
-// @Param	body		body 	models.User	true		"body for User content"
+// @Param   body        body    controllers.UserCreateRequest   true        "Login Request"
 // @Success 201 {int} models.User
 // @Failure 403 body is empty
 // @router / [post]
