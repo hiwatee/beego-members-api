@@ -10,4 +10,5 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/lib/pq v1.0.0
 	github.com/smartystreets/goconvey v1.6.4
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 )

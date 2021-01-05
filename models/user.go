@@ -3,10 +3,12 @@ package models
 import (
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
 
 	"github.com/beego/beego/v2/client/orm"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -18,12 +20,14 @@ type User struct {
 
 type Profile struct {
 	Id  int
-	Age int16
+	Age int16 `orm:"size(128)"`
 }
 
 // AddUser insert a new User into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
+	hash := hashAndSalt(m.Password)
+	m.Password = hash
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
@@ -142,4 +146,13 @@ func DeleteUser(id int64) (err error) {
 		}
 	}
 	return
+}
+
+func hashAndSalt(password string) string {
+	pwd := []byte(password)
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+	}
+	return string(hash)
 }
