@@ -1,6 +1,10 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
+
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -39,6 +43,17 @@ type LoginFailureResponse struct {
 // @router / [post]
 func (c *LoginController) Login() {
 	c.Ctx.Output.SetStatus(201)
+	var v LoginRequest
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("id: %v", v.Email)
+	// eメールでユーザーを検索 | なかったら404
+
+	// パスワード照合 | 間違ったら403
+
+	// set_cookie
 	mes := LoginResponse{Message: "success"}
 	c.Data["json"] = mes
 	c.ServeJSON()
