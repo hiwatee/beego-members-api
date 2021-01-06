@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"beego-members-api/models"
 	"encoding/json"
 	"log"
 
+	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -22,9 +24,8 @@ type LoginRequest struct {
 	Password string `orm:"size(128)" json:"password"  example:"password"`
 }
 
-// NOTE: exampleの出し分けが出来ないので別にしています。
-type LoginFailureResponse struct {
-	Message string `json:"message" required:"true" example:"failed" description:"result status"`
+type LoginResponse struct {
+	Message string `json:"message" example:"success"`
 }
 
 // Login
@@ -32,8 +33,8 @@ type LoginFailureResponse struct {
 // @Description Login
 // @Param   body        body    controllers.LoginRequest   true        "Login Request"
 // @Success 201 {object} controllers.LoginResponse
-// NOTE: FailureのBodyに構造体を渡すことが出来ないのでSuccessで代用しています
-// @Success 403 {object} controllers.LoginFailureResponse
+// NOTE: FailureのBodyにObjectを渡すことが出来ないのでSuccessで代用しています
+// @Success 403 {object} controllers.DefaultErrorResponse
 // @router / [post]
 func (c *LoginController) Login() {
 	c.Ctx.Output.SetStatus(201)
@@ -41,7 +42,17 @@ func (c *LoginController) Login() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		log.Fatal(err)
 	}
+	o := orm.NewOrm()
 
+	// ユーザーがいるかどうか調べる
+	var user models.User
+	err := o.QueryTable("user").Filter("Email", v.Email).One(&user)
+	if err == orm.ErrNoRows {
+		c.Ctx.Output.SetStatus(401)
+		c.Data["json"] = DefaultErrorResponse{Message: "login_failure"}
+		c.ServeJSON()
+		return
+	}
 	// パスワード照合 | 間違ったら403
 
 	// set_cookie
