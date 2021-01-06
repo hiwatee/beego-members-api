@@ -19,9 +19,9 @@ type ProfileRequest struct {
 	Age int64 `json:"age" required:"true" example:"0"`
 }
 type UserCreateRequest struct {
-	Email    string         `json:"email" required:"true" example:"info@example.com"`
-	Password string         `json:"password" required:"true" example:"password"`
-	Profile  ProfileRequest `json:"profile" required:"true"`
+	LoginRequest
+	models.UserInfoBody
+	Profile models.ProfileBody `json:"profile" required:"true"`
 }
 
 // URLMapping ...

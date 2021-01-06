@@ -19,13 +19,8 @@ func (c *LoginController) URLMapping() {
 }
 
 type LoginRequest struct {
-	Email   string `json:"email" required:"true" example:"info@example.com"`
-	Pasword string `json:"password" required:"true" example:"password"`
-}
-
-type LoginResponse struct {
-	// TODO: enumをサポートしたらenumに変更する
-	Message string `json:"message" required:"true" example:"success" description:"result status"`
+	Email    string `orm:"size(128)" json:"email"  example:"info@example.com"`
+	Password string `orm:"size(128)" json:"password"  example:"password"`
 }
 
 // NOTE: exampleの出し分けが出来ないので別にしています。
@@ -54,7 +49,7 @@ func (c *LoginController) Login() {
 	// パスワード照合 | 間違ったら403
 
 	// set_cookie
-	mes := LoginResponse{Message: "success"}
+	mes := DefaultSuccessResponse{Message: "success"}
 	c.Data["json"] = mes
 	c.ServeJSON()
 }

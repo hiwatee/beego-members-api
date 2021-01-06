@@ -12,17 +12,30 @@ import (
 )
 
 type User struct {
-	Id       int64  `orm:"auto" json:"id,omitempty"`
-	Email    string `orm:"size(128)" json:"email"`
-	Password string `orm:"size(128)" json:"-"`
-	TimeStamp
+	Id int64 `orm:"auto" json:"id,omitempty"`
+	UserLoginBody
+	UserInfoBody
 	Profile *Profile `orm:"rel(one)" json:"profile"` // OneToOne relation
+	TimeStamp
 }
 
 type Profile struct {
-	Id  int64 `orm:"auto" json:"id,omitempty"`
-	Age int64 `orm:"size(128)" json:"age"`
+	Id int64 `orm:"auto" json:"id,omitempty"`
+	ProfileBody
 	TimeStamp
+}
+
+type ProfileBody struct {
+	Age int64 `orm:"size(128)" json:"age"`
+}
+
+type UserLoginBody struct {
+	Email    string `orm:"size(128)" json:"email"`
+	Password string `orm:"size(128)" json:"-"`
+}
+
+type UserInfoBody struct {
+	Name string `orm:"size(128)" json:"name" example:"山田太郎"`
 }
 
 // AddUser insert a new User into database and returns
