@@ -37,17 +37,22 @@ func (c *UserController) URLMapping() {
 // @Title Post
 // @Description create User
 // @Param   body        body    controllers.UserCreateRequest   true        "Login Request"
-// @Success 201 {int} models.User
-// @Failure 403 body is empty
+// @Success 201 {object} models.User
+// @Success 402 {object} controllers.DefaultErrorResponse
 // @router / [post]
 func (c *UserController) Post() {
 	var v models.User
+	var e DefaultErrorResponse
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if _, err := models.AddUser(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
 	} else {
-		c.Data["json"] = err.Error()
+		if err.Error() == "user_already_exists" {
+			c.Ctx.Output.SetStatus(409)
+			e.Message = err.Error()
+			c.Data["json"] = e
+		}
 	}
 	c.ServeJSON()
 }

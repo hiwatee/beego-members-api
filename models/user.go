@@ -54,12 +54,25 @@ type AccessToken struct {
 	ExpiredAt time.Time `json:"-"`
 }
 
+var (
+	UserAlreadyExistsError = errors.New("user_already_exists")
+)
+
 // AddUser insert a new User into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
 	hash := hashAndSalt(m.Password)
 	m.Password = hash
 	o := orm.NewOrm()
+
+	qs := o.QueryTable(new(User))
+	count, err := qs.Filter("Email", m.Email).Count()
+	if err != nil {
+		return
+	}
+	if count != 0 {
+		return 0, UserAlreadyExistsError
+	}
 
 	profileId, err := o.Insert(m.Profile)
 
