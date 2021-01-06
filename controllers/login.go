@@ -54,6 +54,12 @@ func (c *LoginController) Login() {
 		return
 	}
 	// パスワード照合 | 間違ったら403
+	if !user.CheckPassword(v.Password) {
+		c.Ctx.Output.SetStatus(401)
+		c.Data["json"] = DefaultErrorResponse{Message: "login_failure"}
+		c.ServeJSON()
+		return
+	}
 
 	// set_cookie
 	mes := DefaultSuccessResponse{Message: "success"}

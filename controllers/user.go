@@ -37,7 +37,7 @@ func (c *UserController) URLMapping() {
 // @Title Post
 // @Description create User
 // @Param   body        body    controllers.UserCreateRequest   true        "Login Request"
-// @Success 201 {object} models.User
+// @Success 201 {object} models.UserResponse
 // @Success 409 {object} controllers.DefaultErrorResponse
 // @router / [post]
 func (c *UserController) Post() {

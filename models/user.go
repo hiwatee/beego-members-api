@@ -14,13 +14,26 @@ import (
 
 type User struct {
 	Id int64 `orm:"auto" json:"id,omitempty"`
-	UserLoginBody
+	UserBody
 	UserInfoBody
 	Profile *Profile `orm:"rel(one)" json:"profile"` // OneToOne relation
 	TimeStamp
 }
 
-type UserLoginBody struct {
+type UserBody struct {
+	Email    string `orm:"size(128)" json:"email"`
+	Password string `orm:"size(128)" json:"password"`
+}
+
+type UserResponse struct {
+	Id int64 `orm:"auto" json:"id,omitempty"`
+	UserLoginResponseBody
+	UserInfoBody
+	Profile *Profile `orm:"rel(one)" json:"profile"` // OneToOne relation
+	TimeStamp
+}
+
+type UserLoginResponseBody struct {
 	Email    string `orm:"size(128)" json:"email"`
 	Password string `orm:"size(128)" json:"-"`
 }
@@ -58,13 +71,21 @@ var (
 	UserAlreadyExistsError = errors.New("user_already_exists")
 )
 
+func (user *User) CheckPassword(password string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
+}
+
 // AddUser insert a new User into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
 	hash := hashAndSalt(m.Password)
 	m.Password = hash
-	o := orm.NewOrm()
 
+	o := orm.NewOrm()
 	qs := o.QueryTable(new(User))
 	count, err := qs.Filter("Email", m.Email).Count()
 	if err != nil {
@@ -73,9 +94,7 @@ func AddUser(m *User) (id int64, err error) {
 	if count != 0 {
 		return 0, UserAlreadyExistsError
 	}
-
 	profileId, err := o.Insert(m.Profile)
-
 	m.Profile.Id = profileId
 	id, err = o.Insert(m)
 	return
@@ -197,8 +216,7 @@ func DeleteUser(id int64) (err error) {
 }
 
 func hashAndSalt(password string) string {
-	pwd := []byte(password)
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
 		log.Println(err)
 	}
