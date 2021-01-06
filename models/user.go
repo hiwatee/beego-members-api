@@ -6,6 +6,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/beego/beego/v2/client/orm"
 	"golang.org/x/crypto/bcrypt"
@@ -19,6 +20,14 @@ type User struct {
 	TimeStamp
 }
 
+type UserLoginBody struct {
+	Email    string `orm:"size(128)" json:"email"`
+	Password string `orm:"size(128)" json:"-"`
+}
+
+type UserInfoBody struct {
+	Name string `orm:"size(128)" json:"name" example:"山田太郎"`
+}
 type Profile struct {
 	Id int64 `orm:"auto" json:"id,omitempty"`
 	ProfileBody
@@ -29,13 +38,20 @@ type ProfileBody struct {
 	Age int64 `orm:"size(128)" json:"age"`
 }
 
-type UserLoginBody struct {
-	Email    string `orm:"size(128)" json:"email"`
-	Password string `orm:"size(128)" json:"-"`
+type Token struct {
+	Id    int64  `orm:"auto" json:"id,omitempty"`
+	Token string `json:"token"`
+	User  *User  `orm:"rel(one)" json:"user"` // OneToOne relation
+	TimeStamp
+	ExpiredAt time.Time `json:"-"`
 }
 
-type UserInfoBody struct {
-	Name string `orm:"size(128)" json:"name" example:"山田太郎"`
+type AccessToken struct {
+	Id    int64  `orm:"auto" json:"id,omitempty"`
+	Token string `json:"token"`
+	User  *User  `orm:"rel(one)" json:"user"` // OneToOne relation
+	TimeStamp
+	ExpiredAt time.Time `json:"-"`
 }
 
 // AddUser insert a new User into database and returns

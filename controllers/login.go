@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	beego "github.com/beego/beego/v2/server/web"
@@ -42,9 +41,6 @@ func (c *LoginController) Login() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("id: %v", v.Email)
-	// eメールでユーザーを検索 | なかったら404
 
 	// パスワード照合 | 間違ったら403
 

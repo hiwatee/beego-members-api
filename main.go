@@ -15,6 +15,8 @@ func init() {
 	orm.RegisterModel(
 		new(models.User),
 		new(models.Profile),
+		new(models.Token),
+		new(models.AccessToken),
 	)
 	orm.RunSyncdb("default", false, true)
 }
