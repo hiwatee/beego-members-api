@@ -234,6 +234,25 @@ func CreateToken(m *User) string {
 	return token
 }
 
+func CreateAccessToken(m *User) string {
+	o := orm.NewOrm()
+	token := hashAndSalt(string(m.Id))
+	expired_at := time.Now().Add(3 * time.Hour)
+
+	t := new(AccessToken)
+	if err := o.QueryTable("access_token").Filter("User", m).One(t); err != orm.ErrNoRows {
+		t.Token = token
+		t.ExpiredAt = expired_at
+		o.Update(t)
+	} else {
+		t.Token = token
+		t.User = m
+		t.ExpiredAt = expired_at
+		o.Insert(t)
+	}
+	return token
+}
+
 func hashAndSalt(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {

@@ -65,6 +65,9 @@ func (c *LoginController) Login() {
 	token := models.CreateToken(&user)
 	accessToken := models.CreateAccessToken(&user)
 
+	log.Print(token)
+	log.Print(accessToken)
+
 	mes := DefaultSuccessResponse{Message: "success"}
 	c.Data["json"] = mes
 	c.ServeJSON()
