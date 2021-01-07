@@ -1,6 +1,9 @@
 # beego-members-api
 Beegoのサンプル
 
+## Versions
+Beego: v2.0.1
+
 ## 起動方法
 ```docker-compose up```
 
