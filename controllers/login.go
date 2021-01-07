@@ -53,6 +53,7 @@ func (c *LoginController) Login() {
 		c.ServeJSON()
 		return
 	}
+
 	// パスワード照合 | 間違ったら403
 	if !user.CheckPassword(v.Password) {
 		c.Ctx.Output.SetStatus(401)
@@ -61,7 +62,9 @@ func (c *LoginController) Login() {
 		return
 	}
 
-	// set_cookie
+	token := models.CreateToken(&user)
+	accessToken := models.CreateAccessToken(&user)
+
 	mes := DefaultSuccessResponse{Message: "success"}
 	c.Data["json"] = mes
 	c.ServeJSON()

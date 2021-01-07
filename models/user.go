@@ -215,6 +215,25 @@ func DeleteUser(id int64) (err error) {
 	return
 }
 
+func CreateToken(m *User) string {
+	o := orm.NewOrm()
+	token := hashAndSalt(string(m.Id))
+	expired_at := time.Now().AddDate(0, 0, 30)
+
+	t := new(Token)
+	if err := o.QueryTable("token").Filter("User", m).One(t); err != orm.ErrNoRows {
+		t.Token = token
+		t.ExpiredAt = expired_at
+		o.Update(t)
+	} else {
+		t.Token = token
+		t.User = m
+		t.ExpiredAt = expired_at
+		o.Insert(t)
+	}
+	return token
+}
+
 func hashAndSalt(password string) string {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
