@@ -10,7 +10,7 @@ WORKDIR /go/src/app
 RUN apt-get update
 RUN go get "github.com/go-sql-driver/mysql"
 RUN go get "github.com/beego/bee"
-RUN go get "github.com/astaxie/beego"
+RUN go get "github.com/beego/beego/v2"
 
 COPY ./entrypoint.sh /
 RUN chmod 777 /entrypoint.sh
