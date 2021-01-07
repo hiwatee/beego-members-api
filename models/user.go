@@ -79,6 +79,44 @@ func (user *User) CheckPassword(password string) bool {
 	return true
 }
 
+func (m *User) CreateToken() string {
+	o := orm.NewOrm()
+	token := hashAndSalt(string(m.Id))
+	expired_at := time.Now().AddDate(0, 0, 30)
+
+	t := new(Token)
+	if err := o.QueryTable("token").Filter("User", m).One(t); err != orm.ErrNoRows {
+		t.Token = token
+		t.ExpiredAt = expired_at
+		o.Update(t)
+	} else {
+		t.Token = token
+		t.User = m
+		t.ExpiredAt = expired_at
+		o.Insert(t)
+	}
+	return token
+}
+
+func (m *User) CreateAccessToken() string {
+	o := orm.NewOrm()
+	token := hashAndSalt(string(m.Id))
+	expired_at := time.Now().Add(3 * time.Hour)
+
+	t := new(AccessToken)
+	if err := o.QueryTable("access_token").Filter("User", m).One(t); err != orm.ErrNoRows {
+		t.Token = token
+		t.ExpiredAt = expired_at
+		o.Update(t)
+	} else {
+		t.Token = token
+		t.User = m
+		t.ExpiredAt = expired_at
+		o.Insert(t)
+	}
+	return token
+}
+
 // AddUser insert a new User into database and returns
 // last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
@@ -213,44 +251,6 @@ func DeleteUser(id int64) (err error) {
 		}
 	}
 	return
-}
-
-func CreateToken(m *User) string {
-	o := orm.NewOrm()
-	token := hashAndSalt(string(m.Id))
-	expired_at := time.Now().AddDate(0, 0, 30)
-
-	t := new(Token)
-	if err := o.QueryTable("token").Filter("User", m).One(t); err != orm.ErrNoRows {
-		t.Token = token
-		t.ExpiredAt = expired_at
-		o.Update(t)
-	} else {
-		t.Token = token
-		t.User = m
-		t.ExpiredAt = expired_at
-		o.Insert(t)
-	}
-	return token
-}
-
-func CreateAccessToken(m *User) string {
-	o := orm.NewOrm()
-	token := hashAndSalt(string(m.Id))
-	expired_at := time.Now().Add(3 * time.Hour)
-
-	t := new(AccessToken)
-	if err := o.QueryTable("access_token").Filter("User", m).One(t); err != orm.ErrNoRows {
-		t.Token = token
-		t.ExpiredAt = expired_at
-		o.Update(t)
-	} else {
-		t.Token = token
-		t.User = m
-		t.ExpiredAt = expired_at
-		o.Insert(t)
-	}
-	return token
 }
 
 func hashAndSalt(password string) string {

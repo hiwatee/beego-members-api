@@ -25,7 +25,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Message string `json:"message" example:"success"`
+	Message     string `json:"message" example:"success"`
+	AccessToken string `json:"accessToken" example:"$t$T$$is$is$token"`
 }
 
 // Login
@@ -62,13 +63,11 @@ func (c *LoginController) Login() {
 		return
 	}
 
-	token := models.CreateToken(&user)
-	accessToken := models.CreateAccessToken(&user)
+	token := user.CreateToken()
+	accessToken := user.CreateAccessToken()
 
-	log.Print(token)
-	log.Print(accessToken)
-
-	mes := DefaultSuccessResponse{Message: "success"}
+	mes := LoginResponse{Message: "success", AccessToken: accessToken}
 	c.Data["json"] = mes
+	c.Ctx.SetCookie("token", token)
 	c.ServeJSON()
 }
