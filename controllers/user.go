@@ -39,7 +39,14 @@ func (c *UserController) URLMapping() {
 // Prepare ...
 func (c *UserController) Prepare() {
 	token := c.Ctx.GetCookie("access_token")
-	GetCurrentUser(token)
+	if token == "" {
+		token = c.Ctx.Request.Header.Get("access_token")
+	}
+	if !IsUserLoggedIn(GetCurrentUser(token)) {
+		c.Ctx.Output.SetStatus(401)
+		c.Data["json"] = DefaultErrorResponse{Message: "user_un_authorized"}
+		c.ServeJSON()
+	}
 }
 
 // Post ...

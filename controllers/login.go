@@ -72,6 +72,6 @@ func (c *LoginController) Login() {
 	c.Data["json"] = mes
 	c.Ctx.SetCookie("token", token)
 	// swaggerでの開発確認用でcookieにもセットしています。
-	c.Ctx.SetCookie("access_token", token)
+	c.Ctx.SetCookie("access_token", accessToken)
 	c.ServeJSON()
 }
