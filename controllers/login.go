@@ -9,7 +9,7 @@ import (
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-//  UserController operations for User
+// LoginController ...
 type LoginController struct {
 	beego.Controller
 }
@@ -19,17 +19,19 @@ func (c *LoginController) URLMapping() {
 	c.Mapping("Login", c.Login)
 }
 
+// LoginRequest ...
 type LoginRequest struct {
 	Email    string `orm:"size(128)" json:"email"  example:"info@example.com"`
 	Password string `orm:"size(128)" json:"password"  example:"password"`
 }
 
+// LoginResponse ...
 type LoginResponse struct {
 	Message     string `json:"message" example:"success"`
 	AccessToken string `json:"accessToken" example:"$t$T$$is$is$token"`
 }
 
-// Login
+// Login ...
 // @Title Login
 // @Description Login
 // @Param   body        body    controllers.LoginRequest   true        "Login Request"
