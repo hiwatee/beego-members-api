@@ -1,23 +1,29 @@
 package controllers
 
-import "log"
-
+// DefaultSuccessResponse is ...
 type DefaultSuccessResponse struct {
 	// TODO: enumをサポートしたらenumに変更する
 	Message string `json:"message" required:"true" example:"success" description:"result status"`
 }
 
+// DefaultErrorResponse is ...
 type DefaultErrorResponse struct {
 	// TODO: enumをサポートしたらenumに変更する
 	Message string `json:"message" required:"true" example:"snaked_params" description:"result status"`
 }
 
-func IsUserLoggedIn() {
-	log.Print("-----------------")
-	log.Print("here")
-	log.Print("-----------------")
-}
+// func IsUserLoggedIn(c *BaseController) {
+// 	GetCurrentUser(c)
+// 	log.Print("-----------------")
+// 	log.Print("here")
+// 	log.Print("-----------------")
+// }
 
-func GetCurrentUser() {
+// GetCurrentUser is ...
+func GetCurrentUser(token string) {
+	// token := c.Ctx.GetCookie("access_token")
+	// log.Print("-----------------")
+	// log.Print(token)
+	// log.Print("-----------------")
 
 }

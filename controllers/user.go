@@ -10,14 +10,17 @@ import (
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-//  UserController operations for User
+// UserController operations for User
 type UserController struct {
 	beego.Controller
 }
 
+// ProfileRequest ...
 type ProfileRequest struct {
 	Age int64 `json:"age" required:"true" example:"0"`
 }
+
+// UserCreateRequest ...
 type UserCreateRequest struct {
 	LoginRequest
 	models.UserInfoBody
@@ -33,8 +36,10 @@ func (c *UserController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
+// Prepare ...
 func (c *UserController) Prepare() {
-	IsUserLoggedIn()
+	token := c.Ctx.GetCookie("access_token")
+	GetCurrentUser(token)
 }
 
 // Post ...
