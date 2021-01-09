@@ -33,6 +33,10 @@ func (c *UserController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
+func (c *UserController) Prepare() {
+	IsUserLoggedIn()
+}
+
 // Post ...
 // @Title Post
 // @Description create User

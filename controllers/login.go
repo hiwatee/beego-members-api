@@ -69,5 +69,7 @@ func (c *LoginController) Login() {
 	mes := LoginResponse{Message: "success", AccessToken: accessToken}
 	c.Data["json"] = mes
 	c.Ctx.SetCookie("token", token)
+	// swaggerでの開発確認用でcookieにもセットしています。
+	c.Ctx.SetCookie("access_token", token)
 	c.ServeJSON()
 }
